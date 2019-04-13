@@ -1,0 +1,7 @@
+- name: "[HAPROXY] - role to install haproxy"
+  hosts: haproxy
+  become: yes
+  roles:
+    - haproxy
+  tags:
+    - haproxy

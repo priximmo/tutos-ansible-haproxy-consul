@@ -1,0 +1,15 @@
+- name: apt update
+  apt:
+    update-cache: yes
+    cache_valid_time: 3600
+
+- name: install haproxy
+  apt:
+    name: haproxy
+    state: present
+
+- name: start haproxy
+  service:
+    name: haproxy
+    state: started
+    enabled: yes

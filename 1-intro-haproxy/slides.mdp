@@ -2,10 +2,10 @@
 %author: xavki
 
 
--> Playlist <-
+-> Playlist : objectifs <-
 
 <br>
-* utiliser ansible par la pratique
+* utiliser ansible par la pratique : autres playlists sur la chaine
 
 
 * en lien avec la playlist consul-haproxy
@@ -14,7 +14,7 @@
 * très progressive
 
 
-* machines = saison 2 de la plyalist scripting : (conteneurs dockers)
+* machines = saison 2 de la playlist scripting : (conteneurs dockers)
 
 
 
@@ -53,6 +53,30 @@ all:
       hosts:
         172.17.0.2:
 ```
+
+le playbook
+
+```
+ name: "[PLAYBOOK] - haproxy"
+  hosts: haproxy
+  become: yes
+  roles:
+    - haproxy
+  tags: 
+    - haproxy
+```
+
+
+----------------------------------------------------------------------------
+
+-> Suite... <-
+
+ansible apt :
+https://docs.ansible.com/ansible/latest/modules/apt_module.html
+
+ansible service :
+https://docs.ansible.com/ansible/latest/modules/service_module.html
+
 
 <br>
 Rôle haproxy : 
