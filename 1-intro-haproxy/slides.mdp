@@ -1,0 +1,76 @@
+%title: Ansible - Haproxy & consul
+%author: xavki
+
+
+-> Playlist <-
+
+<br>
+* utiliser ansible par la pratique
+
+
+* en lien avec la playlist consul-haproxy
+
+
+* très progressive
+
+
+* machines = saison 2 de la plyalist scripting : (conteneurs dockers)
+
+
+
+---------------------------------------------------------------------------
+
+
+
+-> Objectif du jour : installer haproxy
+
+
+<br>
+* hosts.yml : quelles machines ?
+
+
+
+* création d'un rôle : haproxy
+
+
+
+* installation du paquet
+
+
+
+----------------------------------------------------------------------------
+
+
+-> Code <-
+
+<br>
+le hosts.yml
+
+```
+all:
+  children:
+    haproxy:
+      hosts:
+        172.17.0.2:
+```
+
+<br>
+Rôle haproxy : 
+
+```
+- name: "[HAPROXY] - apt update"
+  apt:
+    update-cache: yes
+
+- name: "[HAPROXY] - install haproxy"
+  apt:
+    name:
+      - haproxy
+    state: present
+
+- name: "[HAPROXY] - start service"
+  service:
+    name: haproxy
+    state: started
+```
+
