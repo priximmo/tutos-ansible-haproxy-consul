@@ -13,3 +13,25 @@
     name: haproxy
     state: started
     enabled: yes
+
+- name: "[CONSUL] - Install utils"
+  apt:
+    name:
+      - curl
+      - wget
+      - net-tools
+      - unzip
+
+
+- name: check if consul exist
+  stat:
+    path: /usr/local/bin/consul
+  register: consul_exist
+
+- name: download consul
+  unarchive:
+    src: https://releases.hashicorp.com/consul/1.4.4/consul_1.4.4_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+  when: consul_exist.stat.exists == False
+
