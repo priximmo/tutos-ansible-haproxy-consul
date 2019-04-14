@@ -1,0 +1,78 @@
+%title: Ansible - Haproxy & consul
+%author: xavki
+
+
+-> Playlist : install consul <-
+
+<br>
+* objectif du jour : install consul
+
+
+* installer un zip
+
+
+* vérifier si exist
+
+
+* ajout user
+
+
+* ajout group
+
+
+
+-------------------------------------------------------------------
+
+
+-> Code <-
+
+
+```
+- name: check if consul exist
+  stat:
+    path: /usr/local/bin/consul
+  register: consul_exist
+
+- name: download consul
+  unarchive:
+    src: https://releases.hashicorp.com/consul/1.4.4/consul_1.4.4_linux_amd64.zip
+    dest: /usr/local/bin
+  when: consul_exist.stat.exists == False
+
+- name: add group consul
+  group:
+    name: consul
+    system: yes
+    state: present
+
+- name: add user consul
+  user:
+    name: consul
+    shell: /sbin/nologin
+    system: yes
+    group: consul
+```
+
+--------------------------------------------------------------------
+
+-> code suite <-
+
+
+```
+
+- name: create directory /var/lib/consul
+  file:
+    path: /var/lib/consul
+    state: directory
+    mode: 0755
+    group: consul
+    owner: consul
+
+- name: create directory /etc/consul.d
+  file:
+    path: /etc/consul.d
+    state: directory
+    mode: 0755
+    group: consul
+
+```
