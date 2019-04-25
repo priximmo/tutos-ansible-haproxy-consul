@@ -4,7 +4,7 @@
 
 -> Ansible modules : group et user <-
 
-
+<br>
 * création d'un group système
 
 ```
@@ -33,6 +33,8 @@
 -> Ansible module : file <-
 
 
+<br>
+* création de répertoire
 
 ```
 - name: create directory /var/lib/consul
