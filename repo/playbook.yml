@@ -5,3 +5,13 @@
     - haproxy
   tags:
     - haproxy
+
+- name: "[CONSUL] - role to install consul"
+  hosts: consul
+  become: yes
+  roles:
+    - consul
+  tags:
+    - consul
+
+

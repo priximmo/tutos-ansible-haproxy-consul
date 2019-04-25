@@ -1,0 +1,52 @@
+%title: Ansible - Haproxy & consul
+%author: xavki
+
+
+-> Ansible modules : group et user <-
+
+
+* création d'un group système
+
+```
+- name: add group consul
+  group:
+    name: consul
+    system: yes
+    state: present
+```
+
+* création d'un user (nologin)
+
+```
+- name: add user consul
+  user:
+    name: consul
+    shell: /sbin/nologin
+    system: yes
+    group: consul
+```
+
+--------------------------------------------------------------------
+
+
+
+-> Ansible module : file <-
+
+
+
+```
+- name: create directory /var/lib/consul
+  file:
+    path: /var/lib/consul
+    state: directory
+    mode: 0755
+    group: consul
+    owner: consul
+- name: create directory /etc/consul.d
+  file:
+    path: /etc/consul.d
+    state: directory
+    mode: 0755
+    group: consul
+
+```

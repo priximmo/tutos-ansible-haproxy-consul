@@ -1,0 +1,50 @@
+%title: Ansible - Haproxy & consul
+%author: xavki
+
+
+-> Ansible modules : include <-
+
+* inlude de fichier yaml :
+
+- organiser le code
+- condition par bloc
+
+
+
+```
+- name: if master consul
+  include: master.yml
+  when: consul_master
+```
+
+```
+- name: if agent
+  include: agent.yml
+  when: not consul_server
+```
+
+-------------------------------------------------------------
+
+
+-> Défintion de la variable<-
+
+
+
+```
+consul_server: true
+```
+
+soit dans le host_vars
+soit dans le group_vars (notre cas)
+soit dans le hosts.yml
+
+
+
+
+```
+- name: "[CONSUL] - start service"
+  service:
+    name: consul
+    state: started
+```
+
