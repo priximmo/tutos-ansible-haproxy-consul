@@ -4,29 +4,30 @@
 
 -> Ansible modules : include <-
 
-* inlude de fichier yaml :
+include de fichier yaml :
 
 - organiser le code
+
 - condition par bloc
 
-
+<br>
 
 ```
 - name: if master consul
   include: master.yml
-  when: consul_master
+  when: consul_master is defined
 ```
 
 ```
 - name: if agent
   include: agent.yml
-  when: not consul_server
+  when: not consul_master is not defined
 ```
 
 -------------------------------------------------------------
 
 
--> Défintion de la variable<-
+-> Défintion de la variable <-
 
 
 
@@ -35,16 +36,8 @@ consul_server: true
 ```
 
 soit dans le host_vars
+
 soit dans le group_vars (notre cas)
+
 soit dans le hosts.yml
-
-
-
-
-```
-- name: "[CONSUL] - start service"
-  service:
-    name: consul
-    state: started
-```
 

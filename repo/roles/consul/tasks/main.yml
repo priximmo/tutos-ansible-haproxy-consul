@@ -21,3 +21,40 @@
     remote_src: yes
   when: consul_exist.stat.exists == False
 
+- name: create group consul
+  group:
+    name: consul
+    system: yes
+    state: present
+
+- name: create user consul
+  user:
+    name: consul
+    system: yes
+    shell: /sbin/nologin
+    state: present
+
+- name: create directory for consul data
+  file:
+    path: /var/lib/consul
+    state: directory
+    mode: 0755
+    owner: consul
+    group: consul
+
+- name: create directory for consul configuration
+  file:
+    path: /etc/consul.d/
+    state: directory
+    mode: 0755
+    owner: consul
+    group: consul
+
+- name: include for master
+  include: master.yml
+  when: consul_master is defined
+
+- name: include for agent
+  include: agent.yml
+  when: consul_master is not defined
+

@@ -1,0 +1,5 @@
+- name: test agent
+  file:
+    path: /tmp/agent
+    mode: 0755
+    state: touch

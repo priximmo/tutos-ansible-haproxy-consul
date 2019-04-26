@@ -1,0 +1,5 @@
+- name: test master
+  file:
+    path: /tmp/master
+    state: touch
+    mode: 0755
