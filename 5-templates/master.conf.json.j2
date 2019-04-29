@@ -1,7 +1,7 @@
 {
     "advertise_addr": "{{ ansible_default_ipv4.address }}",
     "bind_addr": "{{ ansible_default_ipv4.address }}",
-    "bootstrap_expect": {{ groups['consulserver'] | length }},
+    "bootstrap_expect": {{ groups['consul'] | length }},
     "client_addr": "0.0.0.0",
     "datacenter": "mydc",
     "data_dir": "/var/lib/consul",
@@ -17,11 +17,11 @@
     "log_level": "INFO",
     "rejoin_after_leave": true,
     "retry_join": [
-    	"{{ groups['consulserver'] | join('\",\"') }}"
+    	"{{ groups['consul'] | join('\",\"') }}"
     ],
     "server": true,
     "start_join": [
-    	"{{ groups['consulserver'] | join('\",\"') }}"
+    	"{{ groups['consul'] | join('\",\"') }}"
     ],
     "ui": true
 }

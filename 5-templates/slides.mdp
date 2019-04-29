@@ -5,6 +5,14 @@
 -> Ansible module : template <-
 
 
+template : 
+
+* vocation à recevoir des variables
+
+* boucles...
+
+<br>
+* sur master.yml
 
 ```
 - name: create service consul for master
@@ -13,6 +21,28 @@
     dest: /etc/systemd/system/consul.service
 
 - name: create config consul for master
+  template:
+    src: master.conf.json.j2
+    dest: /etc/consul.d/conf.json
+
+```
+
+------------------------------------------------------------------
+
+-> Suite <-
+
+
+
+*sur agent.yml
+
+
+```
+- name: create service consul for agent
+  template:
+    src: master.consul.service.j2
+    dest: /etc/systemd/system/consul.service
+
+- name: create config consul for agent
   template:
     src: master.conf.json.j2
     dest: /etc/consul.d/conf.json

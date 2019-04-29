@@ -1,0 +1,96 @@
+%title: Ansible - Haproxy & consul
+%author: xavki
+
+
+-> Ansible module : compilation <-
+
+
+installation d'une appli flask : hosts.yml + role
+
+* installation de flask
+
+```
+- name: "apt update"
+  apt:
+    update-cache: yes
+    cache_valid_time: 3600
+
+- name: "install utils"
+  apt:
+    name:
+      - python3-flask
+```
+
+
+-------------------------------------------------------
+
+-> Intallation de l'applicatif <-
+
+
+```
+- name: "create directory myapp"
+  file:
+    path: /myapp
+    state: directory
+    mode: 0755
+
+- name: "copy myapp file"
+  copy:
+    src: myapp.py
+    dest: /myapp
+    mode: 0755
+
+- name: "create service myapp"
+  template:
+    src: myapp.service.j2
+    dest: /etc/systemd/system/myapp.service
+
+- name: "start service myapp"
+  service:
+    name: myapp
+    state: started
+```
+
+--------------------------------------------------------
+
+-> Fichier de service systemd <-
+
+
+```
+[Unit]
+Description= Flask myapp
+After=network.target
+
+[Service]
+User=root
+Environment="LANG=C.UTF-8" "LC_ALL=C.UTF-8" "FLASK_APP=/myapp/app.py"
+ExecStart=/usr/bin/flask run --host=0.0.0.0 --port=5000
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+
+--------------------------------------------------------
+
+-> Applicatif <-
+
+
+```
+#!/usr/bin/python
+from flask import Flask
+import socket
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    hostname = socket.gethostname()
+    message = "Bonjour, je suis " + hostname + "\n"
+    return message
+```
+
+
+
+

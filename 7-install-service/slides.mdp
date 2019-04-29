@@ -1,0 +1,63 @@
+%title: Ansible - Haproxy & consul
+%author: xavki
+
+
+-> Ansible module : consul <-
+
+
+* module spécifique
+
+<br>
+* installation de la lib python :
+
+```
+- name: "[CONSUL-SERVICES] : update cache"
+  apt:
+    update-cache: yes
+    cache_valid_time: 3600
+
+- name: "[CONSUL-SERVICES] : install pip"
+  apt:
+    name:
+      - python-pip
+
+- name: "[CONSUL-SERVICES] : install python-consul"
+  pip:
+    name: python-consul
+```
+
+-------------------------------------------------------------
+
+
+-> Prise en compte d'un service <-
+
+
+```
+- name: "[CONSUL-SERVICES] : manage service"
+  consul:
+    service_name: "{{ item.key }}"
+    service_port: "{{ item.value.port }}"
+    service_address: "{{ ansible_default_ipv4.address }}"
+    state: "{{ item.value.status }}"
+  with_dict: "{{ consulservice_applis }}"
+  tags:
+    - service
+
+- name: "[CONSUL-SERVICES] : reload consul"
+  command: consul reload
+  tags:
+    - service
+```
+
+
+------------------------------------------------------------
+
+
+-> Variable <-
+
+```
+consulservice_applis:
+  myapp:
+    status: present
+    port: 5000
+```

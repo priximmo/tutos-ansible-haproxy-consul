@@ -1,0 +1,48 @@
+%title: Ansible - Haproxy & consul
+%author: xavki
+
+
+-> Consul template : blocks <-
+
+```
+- name: "add file tmpl for consul-template"
+  copy:
+    src: haproxy.tmpl
+    dest: /var/lib/consultemplate/haproxy.tmpl
+
+- name: "start service consul-template"
+  service:
+    name: consultemplate
+    state: started
+```
+
+
+------------------------------------------------------------------
+
+-> Gestion par block <-
+
+```
+- name: "add line in tmpl file"
+  blockinfile:
+    path: /var/lib/consultemplate/haproxy.tmpl
+    block: |
+
+        frontend "{{ item.name }}"
+        bind "{{ item.source }}"
+        mode http
+        default_backend "{{ item.name }}"
+
+        backend "{{ item.name }}"
+        mode http
+        cookie LBN insert indirect nocache
+        option httpclose
+        option forwardfor
+        balance roundrobin {% raw %}{{ range service {% endraw %}"{{ item.name }}" {% raw %}}}
+        server {{ .Node }} {{.Address }}:{{ .Port }} {{ end }}{% endraw %}
+
+    marker: "# {mark} Service : {{ item.name }}"
+  with_items: "{{ consultemplate_listen }}"
+  notify: consultemplate reload
+```
+
+Rq: créer le handler
