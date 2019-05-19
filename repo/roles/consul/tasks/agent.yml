@@ -3,3 +3,13 @@
     path: /tmp/agent
     mode: 0755
     state: touch
+
+- name: create service consul for agent     
+  template:
+    src: master.consul.service.j2           
+    dest: /etc/systemd/system/consul.service
+
+- name: create config consul for agent      
+  template:
+    src: master.conf.json.j2
+    dest: /etc/consul.d/conf.json

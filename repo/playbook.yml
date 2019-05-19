@@ -14,4 +14,12 @@
   tags:
     - consul
 
-
+- name: "[MYAPP] - install appli"
+  hosts: myapp
+  become: yes
+  roles:
+    - app
+    - consul
+    - consul_services
+  tags:
+    - myapp

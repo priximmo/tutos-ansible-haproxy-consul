@@ -1,0 +1,29 @@
+- name: "update cache"            
+  apt:
+    update-cache: yes
+    cache_valid_time: 3600
+
+- name: "install pip"             
+  apt:
+    name:
+     - python-pip
+
+- name: "install python-consul"   
+  pip:
+    name: python-consul
+
+- name: "manage service"          
+  consul:
+    service_name: "{{ item.key }}"
+    service_port: "{{ item.value.port }}"             
+    service_address: "{{ ansible_default_ipv4.address }}"
+    state: "{{ item.value.status }}"
+  with_dict: "{{ consulservice_applis }}"             
+  tags:
+    - service
+
+- name: "[CONSUL-SERVICES] : reload consul"           
+  command: consul reload
+  tags:
+    - service
+

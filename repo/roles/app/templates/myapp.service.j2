@@ -1,0 +1,11 @@
+[Unit]
+Description= Flask myapp
+After=network.target
+
+[Service]
+User=root
+Environment="LANG=C.UTF-8" "LC_ALL=C.UTF-8" "FLASK_APP=/myapp/myapp.py"
+ExecStart=/usr/bin/flask run --host=0.0.0.0 --port=5000
+
+[Install]
+WantedBy=multi-user.target

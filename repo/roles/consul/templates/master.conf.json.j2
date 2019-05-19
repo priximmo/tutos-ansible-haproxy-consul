@@ -1,0 +1,27 @@
+{
+    "advertise_addr": "{{ ansible_default_ipv4.address }}",
+    "bind_addr": "{{ ansible_default_ipv4.address }}",
+    "bootstrap_expect": {{ groups['consul'] | length }},
+    "client_addr": "0.0.0.0",
+    "datacenter": "mydc",
+    "data_dir": "/var/lib/consul",
+    "domain": "consul",
+    "enable_script_checks": true,
+    "dns_config": {
+        "enable_truncate": true,
+        "only_passing": true
+    },
+    "enable_syslog": true,
+    "encrypt": "ss70sXQCqX07Yjxti19Frw==",
+    "leave_on_terminate": true,
+    "log_level": "INFO",
+    "rejoin_after_leave": true,
+    "retry_join": [
+    	"{{ groups['consul'] | join('\",\"') }}"
+    ],
+    "server": true,
+    "start_join": [
+    	"{{ groups['consul'] | join('\",\"') }}"
+    ],
+    "ui": true
+}
