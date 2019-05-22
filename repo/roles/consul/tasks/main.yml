@@ -58,3 +58,7 @@
   include: agent.yml
   when: consul_master is not defined
 
+- name: start consul
+  service:
+    name: consul
+    state: started

@@ -1,0 +1,39 @@
+
+- name: "install"
+  apt:
+    update-cache: yes
+    cache_valid_time: 3600
+    name: unzip
+    state: present
+
+- name: check if consultemplate exist
+  stat:
+    path: /usr/local/bin/consultemplate
+  register: consultemplate_exist
+
+- name: download and install consultemplate
+  unarchive:
+    src: https://releases.hashicorp.com/consul-template/0.20.0/consul-template_0.20.0_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+  when: consultemplate_exist.stat.exists == False
+
+- name: create consultemplate directory
+  file:
+    path: /var/lib/consultemplate
+    state: directory
+    mode: 0755
+    group: consul
+    owner: consul
+
+- name: create consul-template service
+  template:
+    src: consultemplate.service.j2
+    dest: /etc/systemd/system/consultemplate.service
+
+
+- name: start consul template
+  service:
+    name: consul-template
+    state: started
+
