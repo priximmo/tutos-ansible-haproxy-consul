@@ -4,16 +4,21 @@
 
 -> Consul template : blocks <-
 
+
+* Mise en place du template de consultemplate
+
 ```
 - name: "add file tmpl for consul-template"
-  copy:
-    src: haproxy.tmpl
+  template:
+    src: haproxy.tmpl.j2
     dest: /var/lib/consultemplate/haproxy.tmpl
+```
 
-- name: "start service consul-template"
-  service:
-    name: consultemplate
-    state: started
+* ajout du group_vars haproxy (y compris consultemplate)
+
+```
+consultemplate_listen:
+    - { name: "myapp", source: "*:8000" }
 ```
 
 
@@ -34,8 +39,6 @@
 
         backend "{{ item.name }}"
         mode http
-        cookie LBN insert indirect nocache
-        option httpclose
         option forwardfor
         balance roundrobin {% raw %}{{ range service {% endraw %}"{{ item.name }}" {% raw %}}}
         server {{ .Node }} {{.Address }}:{{ .Port }} {{ end }}{% endraw %}
@@ -46,3 +49,28 @@
 ```
 
 Rq: créer le handler
+
+
+--------------------------------------------------------------------
+
+
+-> Fin <-
+
+
+* Handler
+
+```
+- name: consultemplate reload
+  service:
+    name: consultemplate
+    state: reloaded
+```
+
+* Start du service
+
+```
+- name: "start service consul-template"
+  service:
+    name: consultemplate
+    state: started
+```
