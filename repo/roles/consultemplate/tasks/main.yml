@@ -31,9 +31,34 @@
     src: consultemplate.service.j2
     dest: /etc/systemd/system/consultemplate.service
 
+- name: "add file tmpl for consul-template"
+  template:
+    src: haproxy.tmpl.j2
+    dest: /var/lib/consultemplate/haproxy.tmpl
+
+- name: "add line in tmpl file"
+  blockinfile:
+                path: /var/lib/consultemplate/haproxy.tmpl
+                block: |
+
+                    frontend "{{ item.name }}"
+                    bind "{{ item.source }}"
+                    mode http
+                    default_backend "{{ item.name }}"
+
+                    backend "{{ item.name }}"
+                    mode http
+                    option forwardfor
+                    balance roundrobin {% raw %}{{ range service {% endraw %}"{{ item.name }}" {% raw %}}}
+                    server {{ .Node }} {{.Address }}:{{ .Port }} {{ end }}{% endraw %}
+
+                marker: "# {mark} Service : {{ item.name }}"
+  with_items: "{{ consultemplate_listen }}"
+  notify: consultemplate reload
+
 
 - name: start consul template
   service:
-    name: consul-template
+    name: consultemplate
     state: started
 

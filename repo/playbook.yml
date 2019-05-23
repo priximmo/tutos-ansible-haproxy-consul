@@ -4,6 +4,7 @@
   roles:
     - haproxy
     - consul
+    - consultemplate
   tags:
     - haproxy
 

@@ -1,2 +1,5 @@
----
-# handlers file for consultemplate
+- name: consultemplate reload
+  service:
+    name: consultemplate
+    state: reloaded
+
